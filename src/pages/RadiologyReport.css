@@ -1,0 +1,225 @@
+/* ===============================
+   RADIOLOGY REPORT PAGE (Refined + Blue Theme)
+=============================== */
+
+.report-container {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: "Inter", sans-serif;
+}
+
+/* ===============================
+   HEADER
+=============================== */
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.report-header h1 {
+  font-size: 2.4rem;
+  color: #1e3a8a;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ===============================
+   ACTION BUTTONS
+=============================== */
+.report-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  padding: 12px 28px;
+  border: 2px solid #2563eb;
+  background: white;
+  color: #2563eb;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15);
+}
+
+.action-btn:hover {
+  background: #2563eb;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+}
+
+/* Save button (filled blue) */
+.save-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+  border: none;
+}
+
+.save-btn:hover {
+  background: #1e3a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+}
+
+/* ===============================
+   CHECKBOX AREA
+=============================== */
+.action-checkboxes {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+
+/* ===============================
+   REPORT SECTIONS (CARDS)
+=============================== */
+.report-section {
+  background: white;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
+  margin-bottom: 30px;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.3s ease;
+}
+
+.report-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
+}
+
+.report-section h2 {
+  font-size: 1.6rem;
+  color: #1e3a8a;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* ===============================
+   TEXTAREAS
+=============================== */
+.report-textarea {
+  width: 100%;
+  min-height: 160px;
+  padding: 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 15px;
+  line-height: 1.6;
+  resize: vertical;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.report-textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  outline: none;
+  background: white;
+}
+
+.report-textarea.findings {
+  min-height: 220px;
+}
+
+.report-textarea.impressions {
+  min-height: 140px;
+}
+
+/* ===============================
+   FOOTER SECTION
+=============================== */
+.report-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  padding-top: 25px;
+  border-top: 2px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+  border: none;
+  padding: 16px 36px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+}
+
+.submit-btn:hover {
+  background: #1e3a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.footer-info {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+=============================== */
+@media (max-width: 768px) {
+  .report-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .report-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .action-checkboxes {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .report-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .report-section {
+    padding: 25px;
+  }
+}

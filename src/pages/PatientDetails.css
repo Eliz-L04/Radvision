@@ -1,0 +1,252 @@
+/* ===============================
+   PATIENT DETAILS PAGE – DASHBOARD STYLE
+=============================== */
+
+.patient-details-container {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 60px 20px;
+  font-family: "Inter", sans-serif;
+  color: #1e293b;
+}
+
+/* ===============================
+   HEADER
+=============================== */
+.patient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.patient-header h1 {
+  font-size: 2.4rem;
+  color: #1e3a8a;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.generate-report-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+  border: none;
+  padding: 14px 35px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
+}
+
+.generate-report-btn:hover {
+  background: #1e3a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+}
+
+/* ===============================
+   PATIENT INFO CARD
+=============================== */
+.patient-info {
+  background: white;
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
+  margin-bottom: 40px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.patient-info:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-item label {
+  font-weight: 600;
+  color: #475569;
+  font-size: 14px;
+}
+
+.info-item span {
+  font-size: 1.1rem;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+/* ===============================
+   DICOM VIEWER, AI FINDINGS, DIAGRAMS
+=============================== */
+
+.dicom-viewer-section,
+.ai-findings,
+.diagram-section {
+  background: white;
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
+  margin-bottom: 35px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dicom-viewer-section:hover,
+.ai-findings:hover,
+.diagram-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+}
+
+.dicom-viewer-section h2,
+.ai-findings h2,
+.diagram-section h3 {
+  font-size: 1.6rem;
+  color: #1e3a8a;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+/* Viewer Placeholder */
+.viewer-placeholder {
+  background: #f1f5ff;
+  border: 3px dashed #bfdbfe;
+  border-radius: 14px;
+  padding: 70px 20px;
+  text-align: center;
+  color: #475569;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.viewer-placeholder:hover {
+  background: #e0e7ff;
+  border-color: #2563eb;
+}
+
+/* ===============================
+   AI FINDINGS
+=============================== */
+.findings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.finding-item {
+  padding: 25px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+.finding-item:hover {
+  border-color: #2563eb;
+  background: #f1f5ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
+}
+
+.finding-item h4 {
+  font-size: 1.3rem;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.confidence {
+  display: inline-block;
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.finding-item p {
+  color: #475569;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* ===============================
+   DIAGRAM PLACEHOLDER
+=============================== */
+.diagram-placeholder {
+  background: #f1f5ff;
+  border: 3px dashed #bfdbfe;
+  border-radius: 14px;
+  padding: 50px 25px;
+  text-align: center;
+  color: #475569;
+  transition: all 0.3s ease;
+}
+
+.diagram-placeholder:hover {
+  background: #e0e7ff;
+  border-color: #2563eb;
+}
+
+.diagram-placeholder ul {
+  list-style: none;
+  margin-top: 15px;
+  padding: 0;
+}
+
+.diagram-placeholder li {
+  padding: 8px 0;
+  color: #475569;
+  font-size: 1rem;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+=============================== */
+@media (max-width: 768px) {
+  .patient-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .patient-info,
+  .dicom-viewer-section,
+  .ai-findings,
+  .diagram-section {
+    padding: 25px;
+  }
+
+  .generate-report-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -1,0 +1,222 @@
+/* ===============================
+   UPLOAD SCAN PAGE (Styled to Match Dashboard)
+=============================== */
+
+.upload-container {
+  min-height: 100vh;
+  background: #f8fafc; /* Matches dashboard background */
+  padding: 60px 20px;
+  font-family: "Inter", sans-serif;
+}
+
+/* ===============================
+   HEADER SECTION
+=============================== */
+
+.upload-header {
+  text-align: center;
+  margin-bottom: 50px;
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.upload-header h1 {
+  font-size: 2.4rem;
+  color: #1e3a8a; /* Darker blue for heading */
+  margin-bottom: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.upload-header p {
+  font-size: 1.1rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* ===============================
+   UPLOAD BOX SECTION
+=============================== */
+
+.upload-section {
+  background: white;
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
+  margin-bottom: 40px;
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.upload-section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+}
+
+.upload-section h2 {
+  font-size: 1.6rem;
+  color: #1e3a8a;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+/* Upload Drag Area */
+.upload-area {
+  border: 3px dashed #bfdbfe;
+  border-radius: 14px;
+  padding: 80px 20px;
+  text-align: center;
+  background: #f1f5ff;
+  transition: all 0.3s ease;
+}
+
+.upload-area.drag-active {
+  border-color: #2563eb;
+  background: #e0e7ff;
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.3);
+}
+
+.upload-content p {
+  font-size: 1.1rem;
+  color: #475569;
+  margin-bottom: 25px;
+}
+
+/* Browse Button */
+.browse-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+  border: none;
+  padding: 14px 35px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.browse-btn:hover {
+  background: #1e3a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+}
+
+/* ===============================
+   PATIENT DETAILS FORM
+=============================== */
+
+.patient-details {
+  background: white;
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #e2e8f0;
+}
+
+.patient-details h3 {
+  font-size: 1.6rem;
+  color: #1e3a8a;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.patient-form {
+  margin-bottom: 25px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 12px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  color: #1e293b;
+  background-color: #f8fafc;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  outline: none;
+}
+
+/* ===============================
+   ANALYZE BUTTON
+=============================== */
+
+.analysis-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+  border: none;
+  padding: 16px 50px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+}
+
+.analysis-btn:hover {
+  background: #1e3a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+/* ===============================
+   FOOTER
+=============================== */
+
+.upload-footer {
+  margin-top: 50px;
+  text-align: center;
+  color: #64748b;
+  padding: 20px;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .upload-area {
+    padding: 50px 20px;
+  }
+
+  .upload-section,
+  .patient-details {
+    padding: 25px;
+  }
+}
