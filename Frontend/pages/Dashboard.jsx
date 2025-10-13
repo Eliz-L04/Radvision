@@ -31,7 +31,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="dashboard-main">
         <header className="dashboard-header">
-          <h1>Welcome, Doctor Emily</h1>
+          <h1>Welcome, {localStorage.getItem('username') || 'Doctor'}</h1>
           <p>Here's a quick overview of your activities.</p>
         </header>
 
