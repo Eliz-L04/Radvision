@@ -10,6 +10,13 @@ const UploadScan = () => {
     age: '',
     gender: ''
   });
+
+  const [scanFiles, setScanFiles] = useState({
+    axial: null,
+    sagittal: null,
+    coronal: null
+  });
+
   const navigate = useNavigate();
 
   const handleDrag = (e) => {
@@ -22,20 +29,25 @@ const UploadScan = () => {
     }
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e, type) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      // Handle the dropped files
-      console.log('Files dropped:', e.dataTransfer.files);
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      setScanFiles(prev => ({
+        ...prev,
+        [type]: e.dataTransfer.files
+      }));
     }
   };
 
-  const handleFileInput = (e) => {
+  const handleFileInput = (e, type) => {
     if (e.target.files) {
-      console.log('Files selected:', e.target.files);
+      setScanFiles(prev => ({
+        ...prev,
+        [type]: e.target.files
+      }));
     }
   };
 
@@ -48,9 +60,8 @@ const UploadScan = () => {
   };
 
   const handleStartAnalysis = () => {
-    // Mock analysis start
-    console.log('Starting analysis with:', patientData);
-    navigate('/patient/123'); // Navigate to patient details page
+    console.log('Starting analysis with:', patientData, scanFiles);
+    navigate('/patient/123');
   };
 
   return (
@@ -60,34 +71,95 @@ const UploadScan = () => {
         <p>Leverage cutting-edge AI to automate and enhance the accuracy of medical image analysis.</p>
       </header>
 
+      {/* === UPDATED SECTION STARTS HERE === */}
       <section className="upload-section">
-        <h2>Upload DICOM Scan</h2>
-        <div 
-          className={`upload-area ${dragActive ? 'drag-active' : ''}`}
-          onDragEnter={handleDrag}
-          onDragLeave={handleDrag}
-          onDragOver={handleDrag}
-          onDrop={handleDrop}
-        >
-          <div className="upload-content">
-            <p>Drag & drop your DICOM files here, or</p>
-            <input
-              type="file"
-              id="file-input"
-              multiple
-              accept=".dcm,.dicom"
-              onChange={handleFileInput}
-              style={{ display: 'none' }}
-            />
-            <button 
-              className="browse-btn"
-              onClick={() => document.getElementById('file-input').click()}
+        <h2>Upload DICOM Scans</h2>
+        <p>Please upload all three orientations for optimal analysis</p>
+
+       <div className="scan-group horizontal">
+
+
+          {/* Axial */}
+          <div className="scan-block">
+            <h4>Axial</h4>
+            <div
+              className={`upload-area ${dragActive ? 'drag-active' : ''}`}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={(e) => handleDrop(e, 'axial')}
             >
-              Browse Files
-            </button>
+             
+              <input
+                type="file"
+                id="file-axial"
+                multiple
+                accept=".dcm,.dicom"
+                style={{ display: 'none' }}
+                onChange={(e) => handleFileInput(e, 'axial')}
+              />
+              <button onClick={() => document.getElementById('file-axial').click()}>
+                Browse Axial
+              </button>
+            </div>
+            {scanFiles.axial && <p className="file-info">{scanFiles.axial.length} file(s) selected</p>}
           </div>
+
+          {/* Sagittal */}
+          <div className="scan-block">
+            <h4>Sagittal</h4>
+            <div
+              className={`upload-area ${dragActive ? 'drag-active' : ''}`}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={(e) => handleDrop(e, 'sagittal')}
+            >
+              
+              <input
+                type="file"
+                id="file-sagittal"
+                multiple
+                accept=".dcm,.dicom"
+                style={{ display: 'none' }}
+                onChange={(e) => handleFileInput(e, 'sagittal')}
+              />
+              <button onClick={() => document.getElementById('file-sagittal').click()}>
+                Browse Sagittal
+              </button>
+            </div>
+            {scanFiles.sagittal && <p className="file-info">{scanFiles.sagittal.length} file(s) selected</p>}
+          </div>
+
+          {/* Coronal */}
+          <div className="scan-block">
+            <h4>Coronal</h4>
+            <div
+              className={`upload-area ${dragActive ? 'drag-active' : ''}`}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={(e) => handleDrop(e, 'coronal')}
+            >
+             
+              <input
+                type="file"
+                id="file-coronal"
+                multiple
+                accept=".dcm,.dicom"
+                style={{ display: 'none' }}
+                onChange={(e) => handleFileInput(e, 'coronal')}
+              />
+              <button onClick={() => document.getElementById('file-coronal').click()}>
+                Browse Coronal
+              </button>
+            </div>
+            {scanFiles.coronal && <p className="file-info">{scanFiles.coronal.length} file(s) selected</p>}
+          </div>
+
         </div>
       </section>
+      {/* === UPDATED SECTION ENDS HERE === */}
 
       <section className="patient-details">
         <h3>Patient Details</h3>
@@ -114,6 +186,7 @@ const UploadScan = () => {
               />
             </div>
           </div>
+
           <div className="form-row">
             <div className="form-group">
               <label>Age</label>
@@ -127,8 +200,8 @@ const UploadScan = () => {
             </div>
             <div className="form-group">
               <label>Gender</label>
-              <select 
-                name="gender" 
+              <select
+                name="gender"
                 value={patientData.gender}
                 onChange={handleInputChange}
               >
@@ -140,6 +213,7 @@ const UploadScan = () => {
             </div>
           </div>
         </div>
+
         <button className="analysis-btn" onClick={handleStartAnalysis}>
           Start Analysis
         </button>
@@ -153,3 +227,4 @@ const UploadScan = () => {
 };
 
 export default UploadScan;
+
