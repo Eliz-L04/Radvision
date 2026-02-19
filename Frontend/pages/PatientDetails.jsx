@@ -1,105 +1,184 @@
-import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import './PatientDetails.css';
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import "./PatientDetails.css";
+
+import PersonIcon from "@mui/icons-material/Person";
+import BadgeIcon from "@mui/icons-material/Badge";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import FemaleIcon from "@mui/icons-material/Female";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import HubIcon from "@mui/icons-material/Hub";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import SaveIcon from "@mui/icons-material/Save";
 
 const PatientDetails = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
-
-  // Mock patient data - in real app, fetch from backend
-  const patient = {
-    id: 'P-789012',
-    name: 'Alice Johnson',
-    age: 58,
-    gender: 'Female'
-  };
-
-  const findings = [
-    {
-      condition: 'Ground Glass Opacity (GGO)',
-      confidence: '88.2%',
-      description: 'Food ground glass opacity in the left upper lobe, consistent with inflammatory changes. Requires follow-up to monitor resolution.'
-    },
-    {
-      condition: 'Spinal Stenosis',
-      description: 'Moderate lumbar spinal stenosis at L4-L5 level with associated neural foraminal narrowing. Impinging on the traversing nerve root.'
-    },
-    {
-      condition: 'Cerebral Microbleeds',
-      description: 'Multiple small cerebral microbleeds identified in the frontal and parietal white matter. Correlate clinically for risk factors.'
-    }
-  ];
-
-  const handleGenerateReport = () => {
-    navigate('/report/123');
-  };
+  const { id } = useParams();
 
   return (
-    <div className="patient-details-container">
-      <header className="patient-header">
-        <h1>Patient Details</h1>
-        <button className="generate-report-btn" onClick={handleGenerateReport}>
-          Generate Radiology Report
-        </button>
-      </header>
+    <div className="pd-container">
 
-      <div className="patient-info">
-        <div className="info-grid">
-          <div className="info-item">
-            <label>Patient ID:</label>
-            <span>{patient.id}</span>
+      {/* HEADER */}
+      <div className="pd-top">
+        <div>
+          <h1>Patient Diagnostic Review</h1>
+          <p>Case ID: RAD-9928-AX-001 • Study Date: Oct 24, 2024</p>
+        </div>
+
+        <div className="top-actions">
+          <button className="green-outline-btn">
+            <SaveIcon fontSize="small" />
+            Save Progress
+          </button>
+
+          <button 
+            className="green-btn"
+            onClick={() => navigate(`/report/${id}`)}
+          >
+            Generate Report
+          </button>
+        </div>
+      </div>
+
+      {/* PATIENT INFO */}
+      <div className="pd-info-row">
+        <div className="info-card">
+          <PersonIcon />
+          <div>
+            <span>Full Name</span>
+            <h4>Alice Johnson</h4>
           </div>
-          <div className="info-item">
-            <label>Name:</label>
-            <span>{patient.name}</span>
+        </div>
+
+        <div className="info-card">
+          <BadgeIcon />
+          <div>
+            <span>Patient ID</span>
+            <h4>P-789012</h4>
           </div>
-          <div className="info-item">
-            <label>Age:</label>
-            <span>{patient.age}</span>
+        </div>
+
+        <div className="info-card">
+          <CalendarTodayIcon />
+          <div>
+            <span>Age / DOB</span>
+            <h4>58Y (Mar 12, 1966)</h4>
           </div>
-          <div className="info-item">
-            <label>Gender:</label>
-            <span>{patient.gender}</span>
+        </div>
+
+        <div className="info-card">
+          <FemaleIcon />
+          <div>
+            <span>Gender</span>
+            <h4>Female</h4>
           </div>
         </div>
       </div>
 
-      <section className="dicom-viewer-section">
-        <h2>DICOM Viewer</h2>
-        <div className="dicom-viewer">
-          <div className="viewer-placeholder">
-            <p>DICOM Image Viewer would be integrated here</p>
-            <p>Using libraries like Cornerstone.js</p>
-          </div>
-        </div>
-      </section>
+      {/* MAIN GRID */}
+      <div className="pd-main">
 
-      <section className="ai-findings">
-        <h2>AI Analysis Findings</h2>
-        <div className="findings-list">
-          {findings.map((finding, index) => (
-            <div key={index} className="finding-item">
-              <h4>{finding.condition}</h4>
-              {finding.confidence && (
-                <span className="confidence">Confidence: {finding.confidence}</span>
-              )}
-              <p>{finding.description}</p>
+        {/* LEFT SIDE */}
+        <div className="left-panel">
+
+          {/* MPR */}
+          <div className="section-card">
+            <div className="section-header">
+              <VisibilityIcon />
+              <h3>Multi-Planar Reconstruction (MPR)</h3>
             </div>
-          ))}
-        </div>
-      </section>
 
-      <section className="diagram-section">
-        <h3>Analysis Diagram</h3>
-        <div className="diagram-placeholder">
-          <p>AI-generated heatmaps and diagrams would appear here</p>
-          <ul>
-            <li>Primary: 0.1 mm</li>
-            <li>Primary: 0.3 mm</li>
-            <li>Primary: 0.4 mm</li>
-          </ul>
+            <div className="dicom-grid">
+              <div className="dicom-box">Axial View</div>
+              <div className="dicom-box">Coronal View</div>
+              <div className="dicom-box">Sagittal View</div>
+            </div>
+
+            <div className="dicom-footer">
+              WL 40 • WW 400 • Zoom 1.2x • Interp: Bilinear
+            </div>
+          </div>
+
+          {/* HEATMAP SECTION */}
+          <div className="section-card">
+            <div className="section-header">
+              <LocalFireDepartmentIcon />
+              <h3>Heatmap Distribution Analysis</h3>
+            </div>
+
+            <div className="heatmap-container">
+              <div className="heatmap-chart">
+                Contrast Density Delta
+              </div>
+
+              <div className="heatmap-table">
+                <div className="heat-row critical">
+                  <span>L-Upper Lobe</span>
+                  <span>0.92</span>
+                  <span>Critical</span>
+                </div>
+                <div className="heat-row">
+                  <span>R-Lower Lobe</span>
+                  <span>0.45</span>
+                  <span>Normal</span>
+                </div>
+                <div className="heat-row">
+                  <span>Mediastinum</span>
+                  <span>0.68</span>
+                  <span>Observe</span>
+                </div>
+                <div className="heat-row">
+                  <span>Pleural Cavity</span>
+                  <span>0.21</span>
+                  <span>Normal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
-      </section>
+
+        {/* RIGHT SIDE */}
+        <div className="right-panel">
+
+          {/* TDA SHAPE ANALYSIS */}
+          <div className="section-card">
+            <div className="section-header">
+              <HubIcon />
+              <h3>TDA Shape Analysis</h3>
+            </div>
+
+            <div className="tda-graph">
+              Persistence Diagram
+            </div>
+
+            <div className="tda-metrics">
+              <div>
+                <span>Global Shape Entropy</span>
+                <strong>4.82 bits</strong>
+              </div>
+
+              <div>
+                <span>Connectivity Index</span>
+                <strong>0.64 β</strong>
+              </div>
+
+              <div>
+                <span>Geometric Divergence</span>
+                <strong>12.5%</strong>
+              </div>
+            </div>
+
+            <div className="tda-warning">
+              Observation Required (Stage 2)
+              <p>Structural anomalies detected in H1 dimension.</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
     </div>
   );
 };

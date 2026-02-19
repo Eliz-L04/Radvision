@@ -1,114 +1,197 @@
-import React, { useState } from 'react';
-import './PatientManagement.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./PatientManagement.css";
 
 const PatientManagement = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filters, setFilters] = useState({
-    scanType: '',
-    dateRange: ''
-  });
+  const navigate = useNavigate();
 
-  // Mock patient data
+  const [search, setSearch] = useState("");
+  const [selectedDate, setSelectedDate] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const patientsPerPage = 3;
+
   const patients = [
-    { id: 'RAD-001', name: 'Alice Johnson', age: 45, gender: 'Female', scanHistory: ['CT Scan', 'MRI Scan'], lastReport: '2023-10-28' },
-    { id: 'RAD-002', name: 'Bob Williams', age: 62, gender: 'Male', scanHistory: ['X-Ray'], lastReport: '2023-11-03' },
-    { id: 'RAD-003', name: 'Carol Davis', age: 38, gender: 'Female', scanHistory: ['Ultrasound', 'CT Scan'], lastReport: '2023-09-22' },
-    { id: 'RAD-004', name: 'David Brown', age: 71, gender: 'Male', scanHistory: ['MRI Scan', 'X-Ray'], lastReport: '2023-10-12' },
-    { id: 'RAD-005', name: 'Eve Green', age: 29, gender: 'Female', scanHistory: ['CT Scan'], lastReport: '2023-11-17' },
-    { id: 'RAD-006', name: 'Frank White', age: 55, gender: 'Male', scanHistory: ['Ultrasound', 'MRI Scan'], lastReport: '2023-12-03' }
+    { id: "RAD-2041", name: "Alice Johnson", age: 45, gender: "Female", scan: "Knee MRI", date: "2024-05-12", status: "Reported" },
+    { id: "RAD-2042", name: "Robert Williams", age: 62, gender: "Male", scan: "Knee MRI", date: "2024-05-14", status: "Awaiting Review" },
+    { id: "RAD-2043", name: "Carol Davis", age: 38, gender: "Female", scan: "Knee MRI", date: "2024-05-14", status: "Priority" },
+    { id: "RAD-2044", name: "David Brown", age: 71, gender: "Male", scan: "Knee MRI", date: "2024-05-13", status: "Reported" },
+    { id: "RAD-2045", name: "Eve Green", age: 29, gender: "Female", scan: "Knee MRI", date: "2024-05-15", status: "In Progress" },
+    { id: "RAD-2046", name: "Frank White", age: 55, gender: "Male", scan: "Knee MRI", date: "2024-05-11", status: "Reported" },
   ];
 
-  const filteredPatients = patients.filter(patient =>
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.id.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // STATUS STYLE
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "Reported": return "status reported";
+      case "Awaiting Review": return "status awaiting";
+      case "Priority": return "status priority";
+      case "In Progress": return "status inprogress";
+      default: return "status";
+    }
+  };
+
+  // 🔎 SEARCH + DATE FILTER
+  const filteredPatients = patients.filter((p) => {
+    const matchesSearch =
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.id.toLowerCase().includes(search.toLowerCase());
+
+    const matchesDate =
+      selectedDate === "All" || p.date === selectedDate;
+
+    return matchesSearch && matchesDate;
+  });
+
+  // 📄 PAGINATION LOGIC
+  const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
+  const indexOfLast = currentPage * patientsPerPage;
+  const indexOfFirst = indexOfLast - patientsPerPage;
+  const currentPatients = filteredPatients.slice(indexOfFirst, indexOfLast);
 
   return (
-    <div className="patient-management-container">
-      <header className="management-header">
-        <h1>Efficient Patient Data Management</h1>
-        <p>Access, organize, and analyze comprehensive patient records with RadAI's intuitive database.</p>
-      </header>
+    <div className="patient-page">
 
-      <section className="search-section">
-        <h3>Add New Patient</h3>
-        <div className="search-filters">
-          <input
-            type="text"
-            placeholder="Search by Patient ID or Name"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-          <select 
-            value={filters.scanType}
-            onChange={(e) => setFilters(prev => ({ ...prev, scanType: e.target.value }))}
-          >
-            <option value="">Scan Type</option>
-            <option value="ct">CT Scan</option>
-            <option value="mri">MRI Scan</option>
-            <option value="xray">X-Ray</option>
-            <option value="ultrasound">Ultrasound</option>
-          </select>
-          <select 
-            value={filters.dateRange}
-            onChange={(e) => setFilters(prev => ({ ...prev, dateRange: e.target.value }))}
-          >
-            <option value="">Date Range</option>
-            <option value="week">Last Week</option>
-            <option value="month">Last Month</option>
-            <option value="quarter">Last Quarter</option>
-          </select>
-          <button className="filter-btn">Apply Filters</button>
+      {/* HERO */}
+      <div className="patient-hero">
+        <div>
+          <div className="hero-small">SPECIALIZED DIAGNOSTIC IMAGING</div>
+          <h1>Patient Records</h1>
+          <h2>Knee MRI Specialization</h2>
+          <p>
+            Comprehensive database of knee diagnostic scans.
+          </p>
         </div>
-      </section>
 
-      <section className="patient-records">
-        <h3>Patient Records</h3>
-        <p>Comprehensive list of all patients and their medical history.</p>
-        
-        <div className="table-container">
-          <table className="patients-table">
-            <thead>
-              <tr>
-                <th>Patient ID</th>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Gender</th>
-                <th>Scan History</th>
-                <th>Last Report Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPatients.map(patient => (
-                <tr key={patient.id}>
-                  <td>{patient.id}</td>
-                  <td>{patient.name}</td>
-                  <td>{patient.age}</td>
-                  <td>{patient.gender}</td>
-                  <td>
-                    <div className="scan-history">
-                      {patient.scanHistory.map((scan, index) => (
-                        <span key={index} className="scan-tag">{scan}</span>
-                      ))}
-                    </div>
-                  </td>
-                  <td>{patient.lastReport}</td>
-                  <td>
-                    <button className="action-btn view-btn">View</button>
-                    <button className="action-btn report-btn">Report</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="hero-stats">
+          <div>
+            <span>Total Scans</span>
+            <strong>{patients.length}</strong>
+          </div>
+          <div>
+            <span>Pending Review</span>
+            <strong>
+              {patients.filter(p => p.status === "Awaiting Review").length}
+            </strong>
+          </div>
         </div>
-      </section>
+      </div>
 
-      <footer className="management-footer">
-        <div>Company Resources</div>
-      </footer>
+      {/* MAIN CARD */}
+      <div className="patient-card">
+
+        {/* HEADER */}
+        <div className="queue-header">
+          <div>
+            <h3>Diagnostic Queue</h3>
+            <span>Reviewing {filteredPatients.length} active cases</span>
+          </div>
+
+          <div className="queue-controls">
+            <input
+              className="search-input"
+              placeholder="Search patient or ID..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+
+            <select>
+              <option>Knee MRI</option>
+            </select>
+
+            <select
+              value={selectedDate}
+              onChange={(e) => {
+                setSelectedDate(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
+              <option value="All">All Dates</option>
+              <option value="2024-05-11">May 11</option>
+              <option value="2024-05-12">May 12</option>
+              <option value="2024-05-13">May 13</option>
+              <option value="2024-05-14">May 14</option>
+              <option value="2024-05-15">May 15</option>
+            </select>
+
+            <button className="export-btn">Export CSV</button>
+          </div>
+        </div>
+
+        {/* TABLE HEADER */}
+        <div className="table-header">
+          <div>Patient ID</div>
+          <div>Name</div>
+          <div>Age</div>
+          <div>Gender</div>
+          <div>Scan</div>
+          <div>Date</div>
+          <div>Status</div>
+          <div>Actions</div>
+        </div>
+
+        {/* ROWS */}
+        {currentPatients.map((patient) => (
+          <div key={patient.id} className="patient-row">
+            <div>{patient.id}</div>
+            <div className="patient-name">{patient.name}</div>
+            <div>{patient.age}</div>
+            <div>{patient.gender}</div>
+            <div><span className="scan-badge">{patient.scan}</span></div>
+            <div>{patient.date}</div>
+            <div>
+              <span className={getStatusClass(patient.status)}>
+                {patient.status}
+              </span>
+            </div>
+            <div className="action-buttons">
+              <button className="view-btn">View</button>
+              <button
+                className="report-btn"
+                onClick={() => navigate(`/patient/${patient.id}`)}
+              >
+                Report
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {/* PAGINATION */}
+        <div className="pagination">
+          <button
+            className="page-btn"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Previous
+          </button>
+
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index}
+              className={`page-btn ${currentPage === index + 1 ? "active" : ""}`}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
+
+          <button
+            className="page-btn"
+            disabled={currentPage === totalPages || totalPages === 0}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </button>
+
+          <div className="patient-count">
+            Showing {filteredPatients.length} patients
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,18 @@
+:root {
+  --bg-main: #03110d;
+  --bg-card: #061914;
+  --bg-hover: #0b211b;
+
+  --border-color: #0f2f26;
+
+  --primary-green: #10b981;
+  --primary-green-hover: #059669;
+
+  --text-main: #d1fae5;
+  --text-secondary: #9ca3af;
+
+  --shadow-soft: 0 0 20px rgba(16,185,129,0.05);
+
+  --radius-lg: 16px;
+  --radius-md: 12px;
+}

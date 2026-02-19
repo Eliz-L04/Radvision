@@ -7,6 +7,8 @@ import PatientDetails from './pages/PatientDetails';
 import RadiologyReport from './pages/RadiologyReport';
 import PatientManagement from './pages/PatientManagement';
 import Reports from "./pages/Reports";
+import "./theme.css";
+
 
 import './App.css';
 
@@ -22,7 +24,6 @@ function App() {
         <Route path="/report/:id" element={<RadiologyReport />} />
         <Route path="/patients" element={<PatientManagement />} />
         <Route path="/reports" element={<Reports />} />
-
       </Routes>
     </div>
   );

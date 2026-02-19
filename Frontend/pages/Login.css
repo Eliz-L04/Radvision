@@ -2,6 +2,12 @@
    Fullscreen Login Page Styling
 ================================*/
 
+/* Theme colors */
+:root {
+  --rv-green: #10b981;
+  --rv-green-glow: rgba(16, 185, 129, 0.25);
+}
+
 /* Full screen layout */
 .login-container {
   min-height: 100vh;
@@ -10,7 +16,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') 
+  background: url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=1332&auto=format&fit=crop')
               no-repeat center center/cover;
   position: relative;
   text-align: center;
@@ -22,102 +28,91 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(10, 15, 13, 0.88); /* matches #0a0f0d theme */
   z-index: 0;
 }
 
 /* Floating header text */
 .login-header {
   position: relative;
-  color: #fff;
+  color: #d1fae5;
   z-index: 1;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .login-header h1 {
-  font-size: 34px;
-  font-weight: bold;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+  font-size: 36px;
+  font-weight: 700;
+  color: #10b981;
+  text-shadow: 0 0 12px rgba(16,185,129,0.4);
 }
 
 .login-header p {
   font-size: 16px;
-  color: #ddd;
+  color: #7dd3c0;
   max-width: 600px;
   margin: 0 auto;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* Centered login box */
 .login-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: #111917; /* theme inner card */
   border-radius: 16px;
   padding: 40px;
   width: 100%;
   max-width: 420px;
   text-align: center;
   z-index: 1;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid #1f3d36;
 }
 
 /* Texts inside card */
 .welcome-text {
   font-size: 26px;
-  color: #222;
+  color: #d1fae5;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .sub-text {
-  color: #555;
-  font-size: 15px;
+  color: #7dd3c0;
+  font-size: 14px;
   margin-bottom: 20px;
 }
 
 /* Form elements */
 .login-form .form-group {
   margin-bottom: 15px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 
 .login-form input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
+  max-width: 420px;
+  padding: 12px 14px;
+  border: 1px solid #1f3d36;
   border-radius: 8px;
   font-size: 14px;
+  box-sizing: border-box;
+  display: block;
+  background: #0f1715;
+  color: #d1fae5;
+}
+
+.login-form input::placeholder {
+  color: #7dd3c0;
 }
 
 .login-form input:focus {
-  border-color: #007bff;
+  border-color: #10b981;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-}
-
-/* Role buttons */
-.user-type-selector {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.user-type-selector button {
-  flex: 1;
-  padding: 8px 0;
-  border-radius: 6px;
-  border: none;
-  background-color: #6c757d;
-  color: #fff;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.user-type-selector button.active {
-  background-color: #007bff;
+  box-shadow: 0 0 0 3px var(--rv-green-glow);
 }
 
 /* Login button */
@@ -126,60 +121,43 @@
   padding: 12px;
   border-radius: 8px;
   border: none;
-  background-color: #007bff;
-  color: #fff;
+  background: #10b981;
+  color: black;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: 0.25s;
 }
 
 .login-btn:hover {
-  background-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(16,185,129,0.35);
 }
 
-/* Divider */
-.login-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 15px 0;
-}
-
-.login-divider span {
-  color: #666;
-  font-size: 14px;
-}
-
-/* Alternative login options */
-.alternative-login button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #f8f9fa;
-  color: #333;
-  font-weight: 500;
+/* Secondary buttons */
+.secondary-btn {
+  background: none;
+  border: none;
+  color: #10b981;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.alternative-login button:hover {
-  background-color: #e0e0e0;
+.secondary-btn:hover {
+  text-decoration: underline;
 }
 
 /* Footer */
 .login-footer {
   margin-top: 20px;
-  font-size: 13px;
-  color: #666;
+  font-size: 12px;
+  color: #7dd3c0;
 }
 
-/* Responsive tweaks */
+/* Responsive */
 @media (max-width: 600px) {
   .login-header h1 {
-    font-size: 26px;
+    font-size: 28px;
   }
   .login-card {
     padding: 25px;

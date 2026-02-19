@@ -1,76 +1,120 @@
+// Dashboard.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DescriptionIcon from "@mui/icons-material/Description";
+import PeopleIcon from "@mui/icons-material/People";
+import SettingsIcon from "@mui/icons-material/Settings";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import "./Dashboard.css";
-import { Upload, FileText, Users, Settings } from "lucide-react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  const stats = [
-    { title: "Recent Uploads", value: 12, description: "Total scans uploaded recently" },
-    { title: "Pending Reports", value: 3, description: "Reports awaiting your review" },
-    { title: "Completed Reports", value: 28, description: "Reports finalized this month" },
-  ];
-
   return (
-    <div className="dashboard-layout">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="sidebar-header">
-          <h2 className="logo">RadVision</h2>
+    <div className="dash-layout">
+      {/* SIDEBAR */}
+      <aside className="dash-sidebar">
+        <div>
+          <div className="dash-logo">RadVision</div>
+
+          <nav className="dash-nav">
+            <button className="active" onClick={() => navigate("/dashboard")}>
+              <DashboardIcon fontSize="small" /> Dashboard
+            </button>
+
+            <button onClick={() => navigate("/upload")}>
+              <CloudUploadIcon fontSize="small" /> Upload Scan
+            </button>
+
+            <button onClick={() => navigate("/reports")}>
+              <DescriptionIcon fontSize="small" /> Reports
+            </button>
+
+            <button onClick={() => navigate("/settings")}>
+              <SettingsIcon fontSize="small" /> Settings
+            </button>
+          </nav>
         </div>
-        <nav className="sidebar-nav">
-          <button onClick={() => navigate("/dashboard")}>🏠 Dashboard</button>
-          <button onClick={() => navigate("/upload")}>📤 Upload Scan</button>
-          <button onClick={() => navigate("/reports")}>📄 Reports</button>
-          <button onClick={() => navigate("/patients")}>👥 Patients</button>
-          <button onClick={() => navigate("/settings")}>⚙️ Settings</button>
-        </nav>
+
+        <div className="dash-user">
+          <div className="avatar">👩‍⚕️</div>
+          <div>
+            <div className="name">Dr. Eli Johnson</div>
+            <div className="role">Senior Radiologist</div>
+          </div>
+        </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="dashboard-main">
-        <header className="dashboard-header">
-          <h1>Welcome, {localStorage.getItem('username') || 'Doctor'}</h1>
-          <p>Here's a quick overview of your activities.</p>
-        </header>
-
-        <div className="stats-grid">
-          {stats.map((stat, index) => (
-            <div key={index} className="stat-card">
-              <h4>{stat.title}</h4>
-              <h3>{stat.value}</h3>
-              <p>{stat.description}</p>
-            </div>
-          ))}
+      {/* MAIN */}
+      <main className="dash-main">
+        <div className="dash-header">
+          <h1>Welcome, {localStorage.getItem("username") || "eli"}</h1>
+          <p>
+            Here’s a comprehensive overview of your clinical activities and
+            diagnostic pipeline.
+          </p>
         </div>
 
-        <section className="quick-actions">
-          <h3>Quick Actions</h3>
-          <div className="action-buttons">
-            <button className="primary-btn" onClick={() => navigate("/upload")}>
-              <Upload size={18} /> Upload DICOM
-            </button>
-            <button className="secondary-btn" onClick={() => navigate("/reports")}>
-              <FileText size={18} /> View Reports
-            </button>
+        {/* STATS */}
+        <div className="dash-stats">
+          <div className="stat-card">
+            <InsertDriveFileIcon className="stat-icon" />
+            <div>
+              <div className="stat-value">12</div>
+              <div className="stat-label">Recent Uploads</div>
+            </div>
           </div>
-        </section>
 
-        <footer className="dashboard-footer">
-          <div>
-            <a href="#">About</a> • <a href="#">Help</a>
+          <div className="stat-card">
+            <DescriptionIcon className="stat-icon" />
+            <div>
+              <div className="stat-value">03</div>
+              <div className="stat-label">Pending Reports</div>
+            </div>
           </div>
-          <div className="socials">
-            <i className="fab fa-linkedin"></i>
-            <i className="fab fa-twitter"></i>
-            <i className="fab fa-facebook"></i>
+
+          <div className="stat-card">
+            <DashboardIcon className="stat-icon" />
+            <div>
+              <div className="stat-value">28</div>
+              <div className="stat-label">Completed Reports</div>
+            </div>
           </div>
-        </footer>
+        </div>
+
+        {/* QUICK ACTIONS */}
+        <div className="quick-box">
+          <div className="quick-title">Quick Actions</div>
+          <div className="quick-buttons">
+            <button
+              className="btn-green"
+              onClick={() => navigate("/upload")}
+            >
+              <CloudUploadIcon fontSize="small" /> Upload Scan
+            </button>
+
+            <button
+              className="btn-outline"
+              onClick={() => navigate("/reports")}
+            >
+              <DescriptionIcon fontSize="small" /> View Reports
+            </button>
+          </div>
+        </div>
+
       </main>
     </div>
   );
 };
 
 export default Dashboard;
+
+
+
+
+
+
+
 

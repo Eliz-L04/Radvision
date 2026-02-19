@@ -1,252 +1,280 @@
-/* ===============================
-   PATIENT DETAILS PAGE – DASHBOARD STYLE
-=============================== */
-
-.patient-details-container {
-  min-height: 100vh;
-  background: #f8fafc;
-  padding: 60px 20px;
+/* ================= GLOBAL ================= */
+body {
+  margin: 0;
+  background: #0a0f0d !important;
   font-family: "Inter", sans-serif;
-  color: #1e293b;
+  color: #d1fae5;
 }
 
-/* ===============================
-   HEADER
-=============================== */
-.patient-header {
+.pd-container {
+  padding: 30px 40px;
+  width: 100%;
+  margin: 0;
+}
+
+
+/* ================= HEADER ================= */
+.pd-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 35px;
 }
 
-.patient-header h1 {
-  font-size: 2.4rem;
-  color: #1e3a8a;
-  font-weight: 800;
-  letter-spacing: 0.5px;
+.pd-top h1 {
+  font-size: 26px;
+  margin: 0;
+  font-weight: 600;
 }
 
-.generate-report-btn {
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-  color: white;
+.pd-top p {
+  font-size: 13px;
+  color: #7dd3c0;
+  margin-top: 5px;
+}
+
+.top-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.green-btn {
+  background: #10b981;
   border: none;
-  padding: 14px 35px;
-  border-radius: 10px;
-  font-size: 1rem;
+  padding: 10px 22px;
+  border-radius: 8px;
+  color: black;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
+  transition: 0.2s ease;
 }
 
-.generate-report-btn:hover {
-  background: #1e3a8a;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+.green-btn:hover {
+  transform: translateY(-1px);
 }
 
-/* ===============================
-   PATIENT INFO CARD
-=============================== */
-.patient-info {
-  background: white;
-  padding: 40px;
-  border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
-  margin-bottom: 40px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid #e2e8f0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.patient-info:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 25px;
-}
-
-.info-item {
+.green-outline-btn {
+  background: transparent;
+  border: 1px solid #10b981;
+  color: #10b981;
+  padding: 9px 20px;
+  border-radius: 8px;
+  cursor: pointer;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  gap: 6px;
 }
 
-.info-item label {
+/* ================= INFO ROW ================= */
+.pd-info-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 35px;
+}
+
+.info-card {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  background: #111917;
+  border: 1px solid #1f3d36;
+  padding: 18px;
+  border-radius: 14px;
+}
+
+.info-card span {
+  font-size: 11px;
+  color: #7dd3c0;
+}
+
+.info-card h4 {
+  margin: 3px 0 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* ================= MAIN GRID ================= */
+.pd-main {
+  display: grid;
+  grid-template-columns: 2.1fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+/* ================= SECTION CARD ================= */
+.section-card {
+  background: #0f1715;
+  border: 1px solid #1f3d36;
+  padding: 22px;
+  border-radius: 16px;
+  margin-bottom: 28px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 17px;
   font-weight: 600;
-  color: #475569;
+}
+
+/* ================= DICOM ================= */
+.dicom-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.dicom-box {
+  background: black;
+  border: 1px solid #1f3d36;
+  height: 230px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #7dd3c0;
   font-size: 14px;
 }
 
-.info-item span {
-  font-size: 1.1rem;
-  color: #1e293b;
-  font-weight: 500;
-}
-
-/* ===============================
-   DICOM VIEWER, AI FINDINGS, DIAGRAMS
-=============================== */
-
-.dicom-viewer-section,
-.ai-findings,
-.diagram-section {
-  background: white;
-  padding: 40px;
-  border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
-  margin-bottom: 35px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid #e2e8f0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.dicom-viewer-section:hover,
-.ai-findings:hover,
-.diagram-section:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
-}
-
-.dicom-viewer-section h2,
-.ai-findings h2,
-.diagram-section h3 {
-  font-size: 1.6rem;
-  color: #1e3a8a;
-  margin-bottom: 25px;
-  font-weight: 700;
-}
-
-/* Viewer Placeholder */
-.viewer-placeholder {
-  background: #f1f5ff;
-  border: 3px dashed #bfdbfe;
-  border-radius: 14px;
-  padding: 70px 20px;
+.dicom-footer {
+  margin-top: 14px;
   text-align: center;
-  color: #475569;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
+  font-size: 12px;
+  color: #7dd3c0;
 }
 
-.viewer-placeholder:hover {
-  background: #e0e7ff;
-  border-color: #2563eb;
+/* ================= HEATMAP ================= */
+.heatmap-container {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 20px;
+  align-items: stretch;
 }
 
-/* ===============================
-   AI FINDINGS
-=============================== */
-.findings-list {
+.heatmap-chart {
+  background: #111917;
+  border: 1px solid #1f3d36;
+  border-radius: 12px;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7dd3c0;
+  font-size: 13px;
+}
+
+.heatmap-table {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 12px;
 }
 
-.finding-item {
-  padding: 25px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  background: #f8fafc;
-  transition: all 0.3s ease;
+.heat-row {
+  background: #111917;
+  border: 1px solid #1f3d36;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
 }
 
-.finding-item:hover {
-  border-color: #2563eb;
-  background: #f1f5ff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
-}
-
-.finding-item h4 {
-  font-size: 1.3rem;
-  color: #1e3a8a;
-  margin-bottom: 10px;
-  font-weight: 700;
-}
-
-.confidence {
-  display: inline-block;
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-  color: white;
-  padding: 5px 14px;
-  border-radius: 20px;
-  font-size: 0.9rem;
+.heat-row span:last-child {
+  color: #10b981;
   font-weight: 500;
-  margin-bottom: 10px;
 }
 
-.finding-item p {
-  color: #475569;
-  line-height: 1.6;
-  font-size: 1rem;
+.heat-row.critical {
+  border: 1px solid #ef4444;
 }
 
-/* ===============================
-   DIAGRAM PLACEHOLDER
-=============================== */
-.diagram-placeholder {
-  background: #f1f5ff;
-  border: 3px dashed #bfdbfe;
-  border-radius: 14px;
-  padding: 50px 25px;
-  text-align: center;
-  color: #475569;
-  transition: all 0.3s ease;
+.heat-row.critical span:last-child {
+  color: #ef4444;
 }
 
-.diagram-placeholder:hover {
-  background: #e0e7ff;
-  border-color: #2563eb;
+/* ================= TDA ================= */
+.tda-graph {
+  background: #111917;
+  border: 1px solid #1f3d36;
+  border-radius: 12px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7dd3c0;
+  margin-bottom: 22px;
+  font-size: 14px;
 }
 
-.diagram-placeholder ul {
-  list-style: none;
-  margin-top: 15px;
-  padding: 0;
+.tda-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
 }
 
-.diagram-placeholder li {
-  padding: 8px 0;
-  color: #475569;
-  font-size: 1rem;
+.tda-metrics div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  background: #111917;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #1f3d36;
 }
 
-/* ===============================
-   RESPONSIVE DESIGN
-=============================== */
-@media (max-width: 768px) {
-  .patient-header {
-    flex-direction: column;
-    gap: 15px;
-    align-items: flex-start;
-  }
+.tda-metrics strong {
+  color: #10b981;
+  font-weight: 600;
+}
 
-  .info-grid {
+.tda-warning {
+  background: #052e2b;
+  border: 1px solid #10b981;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.tda-warning p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #7dd3c0;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1200px) {
+  .pd-main {
     grid-template-columns: 1fr;
   }
 
-  .patient-info,
-  .dicom-viewer-section,
-  .ai-findings,
-  .diagram-section {
-    padding: 25px;
+  .pd-info-row {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .generate-report-btn {
-    width: 100%;
-    text-align: center;
+  .heatmap-container {
+    grid-template-columns: 1fr;
+  }
+
+  .dicom-grid {
+    grid-template-columns: 1fr;
   }
 }
+body {
+  margin: 0;
+  background: #0a0f0d !important;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+}
+
