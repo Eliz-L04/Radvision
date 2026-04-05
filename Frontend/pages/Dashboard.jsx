@@ -1,5 +1,5 @@
 // Dashboard.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -9,8 +9,27 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import "./Dashboard.css";
 
+const API_BASE = "http://127.0.0.1:5000";
+
 const Dashboard = () => {
   const navigate = useNavigate();
+
+  const [stats, setStats] = useState({ total: 0, completed: 0, pending: 0 });
+
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/dashboard-stats`);
+        if (res.ok) {
+          const data = await res.json();
+          setStats(data);
+        }
+      } catch (err) {
+        console.warn("Failed to load dashboard stats:", err);
+      }
+    };
+    loadStats();
+  }, []);
 
   return (
     <div className="dash-layout">
@@ -41,7 +60,7 @@ const Dashboard = () => {
         <div className="dash-user">
           <div className="avatar">👩‍⚕️</div>
           <div>
-            <div className="name">Dr. Eli Johnson</div>
+            <div className="name">Dr. {localStorage.getItem("username") || "Radiologist"}</div>
             <div className="role">Senior Radiologist</div>
           </div>
         </div>
@@ -50,9 +69,9 @@ const Dashboard = () => {
       {/* MAIN */}
       <main className="dash-main">
         <div className="dash-header">
-          <h1>Welcome, {localStorage.getItem("username") || "eli"}</h1>
+          <h1>Welcome, {localStorage.getItem("username") || "Doctor"}</h1>
           <p>
-            Here’s a comprehensive overview of your clinical activities and
+            Here's a comprehensive overview of your clinical activities and
             diagnostic pipeline.
           </p>
         </div>
@@ -62,15 +81,15 @@ const Dashboard = () => {
           <div className="stat-card">
             <InsertDriveFileIcon className="stat-icon" />
             <div>
-              <div className="stat-value">12</div>
-              <div className="stat-label">Recent Uploads</div>
+              <div className="stat-value">{String(stats.total).padStart(2, "0")}</div>
+              <div className="stat-label">Total Reports</div>
             </div>
           </div>
 
           <div className="stat-card">
             <DescriptionIcon className="stat-icon" />
             <div>
-              <div className="stat-value">03</div>
+              <div className="stat-value">{String(stats.pending).padStart(2, "0")}</div>
               <div className="stat-label">Pending Reports</div>
             </div>
           </div>
@@ -78,7 +97,7 @@ const Dashboard = () => {
           <div className="stat-card">
             <DashboardIcon className="stat-icon" />
             <div>
-              <div className="stat-value">28</div>
+              <div className="stat-value">{String(stats.completed).padStart(2, "0")}</div>
               <div className="stat-label">Completed Reports</div>
             </div>
           </div>
@@ -110,11 +129,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
-
-
-
-
-
-

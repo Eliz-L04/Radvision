@@ -40,6 +40,11 @@
   max-width: 600px;
 }
 
+.finalized-tag {
+  color: #10b981;
+  font-weight: 600;
+}
+
 /* BUTTONS */
 .header-actions {
   display: flex;
@@ -57,7 +62,7 @@
   transition: 0.2s ease;
 }
 
-.outline-btn:hover {
+.outline-btn:hover:not(:disabled) {
   border-color: #10b981;
   color: #10b981;
 }
@@ -73,8 +78,16 @@
   transition: 0.2s ease;
 }
 
-.primary-btn:hover {
+.primary-btn:hover:not(:disabled) {
   opacity: 0.9;
+}
+
+.btn-disabled,
+.outline-btn:disabled,
+.primary-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+  pointer-events: auto;
 }
 
 /* GRID */
@@ -86,17 +99,19 @@
 
 /* MAIN CARDS */
 .card {
-  background: #0f1715;
+  background: #0f1715 !important;
   padding: 22px;
   border-radius: 14px;
   border: 1px solid #1f3d36;
   box-shadow: 0 0 20px rgba(16,185,129,0.05);
+  margin-bottom: 20px;
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 14px;
+  align-items: center;
 }
 
 .card-header h2 {
@@ -122,6 +137,18 @@
   color: #7dd3c0;
 }
 
+.completed {
+  background: #0a2520;
+  color: #10b981;
+  border: 1px solid #10b98144;
+}
+
+.editable-badge {
+  background: #1a1508;
+  color: #fbbf24;
+  border: 1px solid #f59e0b44;
+}
+
 /* TEXT */
 .card-content p {
   font-size: 14px;
@@ -135,7 +162,148 @@
   color: #7dd3c0;
 }
 
-/* RIGHT SIDE PANELS */
+/* ================= EDITABLE TEXTAREAS ================= */
+.editable-textarea {
+  width: 100%;
+  background: #111917 !important;
+  color: #d1fae5 !important;
+  border: 1px solid #1f3d36 !important;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: "Inter", sans-serif;
+  resize: vertical;
+  outline: none;
+  transition: 0.2s ease;
+  box-sizing: border-box;
+}
+
+.editable-textarea:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+}
+
+.editable-textarea:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #0a0e0c !important;
+}
+
+/* ================= FINDINGS & IMPRESSIONS LISTS ================= */
+.findings-list,
+.impression-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.findings-list li,
+.impression-list li {
+  position: relative;
+  padding: 10px 14px 10px 28px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #d1fae5;
+  background: #111917 !important;
+  border: 1px solid #1a302a;
+  border-radius: 10px;
+  transition: 0.2s ease;
+}
+
+.findings-list li:hover,
+.impression-list li:hover {
+  background: #14201c !important;
+  border-color: #10b98133;
+}
+
+.findings-list li::before {
+  content: "➤";
+  position: absolute;
+  left: 10px;
+  color: #10b981;
+  font-size: 12px;
+}
+
+.impression-list li::before {
+  content: "•";
+  position: absolute;
+  left: 12px;
+  color: #10b981;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.no-data {
+  color: #5f9a89;
+  font-style: italic;
+}
+
+/* ================= DIGITAL SIGNATURE (Name Input) ================= */
+.signature-card {
+  border-color: #10b98144;
+}
+
+.sig-instructions {
+  font-size: 13px !important;
+  color: #7dd3c0 !important;
+  margin-bottom: 14px !important;
+}
+
+.sig-name-input {
+  width: 100%;
+  background: #111917 !important;
+  color: #d1fae5 !important;
+  border: 1px solid #1f3d36 !important;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 16px;
+  font-family: "Inter", sans-serif;
+  outline: none;
+  transition: 0.2s ease;
+  box-sizing: border-box;
+}
+
+.sig-name-input:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+}
+
+.sig-name-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #0a0e0c !important;
+}
+
+.sig-name-input::placeholder {
+  color: #2a4a42;
+}
+
+.sig-preview {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: #0a2520;
+  border: 1px solid #10b98144;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sig-preview-label {
+  font-size: 12px;
+  color: #7dd3c0;
+}
+
+.sig-preview-name {
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 600;
+  color: #d1fae5;
+}
+
+/* ================= RIGHT SIDEBAR — PREDICTIONS ================= */
 .side-card {
   background: #0f1715;
   padding: 20px;
@@ -151,6 +319,12 @@
   color: #10b981;
 }
 
+.side-card p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #9cb8ad;
+}
+
 /* INFO ROW */
 .info-row {
   display: flex;
@@ -164,6 +338,122 @@
   color: #d1fae5;
 }
 
+/* Prediction Sidebar Compact */
+.prediction-grid-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pred-row-side {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #111917;
+  border: 1px solid #1a302a;
+  border-radius: 8px;
+}
+
+.pred-info-side {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 85px;
+}
+
+.pred-task-side {
+  font-size: 11px;
+  font-weight: 600;
+  color: #d1fae5;
+  letter-spacing: 0.5px;
+}
+
+.pred-badge-side {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.pred-pos {
+  background: #ef444433;
+  color: #fca5a5;
+  border: 1px solid #ef444466;
+}
+
+.pred-neg {
+  background: #10b98133;
+  color: #6ee7b7;
+  border: 1px solid #10b98166;
+}
+
+.pred-bar-wrap-side {
+  flex: 1;
+  height: 8px;
+  background: #1a302a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pred-bar-side {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease;
+}
+
+.bar-pos {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.bar-neg {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.pred-prob-side {
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: right;
+  color: #d1fae5;
+}
+
+/* TDA PLANE ROWS */
+.plane-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 12px;
+  background: #111917;
+  border: 1px solid #1a302a;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #7dd3c0;
+}
+
+.plane-name {
+  font-weight: 600;
+  color: #10b981;
+  min-width: 70px;
+}
+
+/* DISCLAIMER */
+.disclaimer-card {
+  border-color: #f59e0b44;
+}
+
+.disclaimer-card h3 {
+  color: #fbbf24;
+}
+
+.disclaimer-card p {
+  font-size: 12px;
+  color: #d4a853;
+  line-height: 1.6;
+}
+
 /* RESPONSIVE */
 @media (max-width: 900px) {
   .rad-grid {
@@ -171,29 +461,25 @@
   }
 }
 
-/* 🔥 FORCE REMOVE ANY WHITE INSIDE CARDS */
-.card,
-.card * {
-  background-color: transparent !important;
-}
+@media print {
+  .rad-report-container {
+    background: white !important;
+    color: black !important;
+    padding: 20px;
+  }
 
-.card {
-  background: #0f1715 !important;
-}
+  .header-actions {
+    display: none !important;
+  }
 
-/* Inputs inside findings */
-.card textarea,
-.card input {
-  background: #111917 !important;
-  color: #d1fae5 !important;
-  border: 1px solid #1f3d36 !important;
-}
+  .card, .side-card {
+    border-color: #ddd !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
 
-/* Remove any white paragraph background */
-.card-content {
-  background: transparent !important;
-}
-
-.card-content p {
-  background: transparent !important;
+  .card *, .side-card * {
+    color: black !important;
+    background: transparent !important;
+  }
 }

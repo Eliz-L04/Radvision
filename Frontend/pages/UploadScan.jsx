@@ -9,6 +9,8 @@ import SecurityIcon from "@mui/icons-material/Security";
 
 const UploadScan = () => {
   const [dragActive, setDragActive] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [patientData, setPatientData] = useState({
     patientId: "",
@@ -28,8 +30,11 @@ const UploadScan = () => {
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") setDragActive(true);
-    else if (e.type === "dragleave") setDragActive(false);
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
   };
 
   const handleDrop = (e, type) => {
@@ -37,7 +42,7 @@ const UploadScan = () => {
     e.stopPropagation();
     setDragActive(false);
 
-    if (e.dataTransfer.files?.length) {
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       setScanFiles((prev) => ({
         ...prev,
         [type]: e.dataTransfer.files
@@ -56,15 +61,84 @@ const UploadScan = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setPatientData((prev) => ({ ...prev, [name]: value }));
+    setPatientData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleStartAnalysis = () => {
-    navigate("/patient/123");
+  const handleStartAnalysis = async () => {
+    setError("");
+
+    if (
+      !patientData.patientId ||
+      !patientData.name ||
+      !patientData.age ||
+      !patientData.gender
+    ) {
+      setError("Please fill in all patient details");
+      return;
+    }
+
+    if (!scanFiles.axial && !scanFiles.sagittal && !scanFiles.coronal) {
+      setError("Please upload at least one scan");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("patientId", patientData.patientId);
+    formData.append("name", patientData.name);
+    formData.append("age", patientData.age);
+    formData.append("gender", patientData.gender);
+
+    if (scanFiles.axial) formData.append("axial", scanFiles.axial[0]);
+    if (scanFiles.sagittal) formData.append("sagittal", scanFiles.sagittal[0]);
+    if (scanFiles.coronal) formData.append("coronal", scanFiles.coronal[0]);
+
+    try {
+      setLoading(true);
+
+      const res = await fetch("http://127.0.0.1:5000/upload-scan", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Upload failed");
+      }
+
+      navigate(`/patient/${data.patientId}`, {
+        state: { patient: patientData, files: data.files }
+      });
+
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Cannot connect to server");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="upload-page">
+
+      {/* ERROR MESSAGE */}
+      {error && (
+        <div
+          style={{
+            backgroundColor: "#fee",
+            color: "#c00",
+            padding: "12px",
+            borderRadius: "6px",
+            margin: "20px",
+            textAlign: "center"
+          }}
+        >
+          {error}
+        </div>
+      )}
 
       {/* HERO */}
       <div className="upload-hero">
@@ -77,7 +151,7 @@ const UploadScan = () => {
 
           <p>
             Automate medical image analysis with advanced AI.
-            Upload multi-planar DICOM scans to generate
+            Upload multi-planar DICOM or NumPy scans to generate
             structured diagnostic reports in seconds.
           </p>
         </div>
@@ -90,7 +164,7 @@ const UploadScan = () => {
       {/* UPLOAD CARD */}
       <div className="upload-card">
         <div className="card-title">
-          <CloudUploadIcon /> Upload DICOM Scans
+          <CloudUploadIcon /> Upload DICOM / NPY Scans
         </div>
 
         <div className="scan-grid">
@@ -112,7 +186,7 @@ const UploadScan = () => {
                   type="file"
                   id={`file-${type}`}
                   multiple
-                  accept=".dcm,.dicom"
+                  accept=".dcm,.dicom,.npy"
                   hidden
                   onChange={(e) => handleFileInput(e, type)}
                 />
@@ -135,7 +209,7 @@ const UploadScan = () => {
           ))}
         </div>
 
-        {/* PATIENT */}
+        {/* PATIENT DETAILS */}
         <div className="patient-title">
           <PersonIcon /> Patient Details
         </div>
@@ -175,8 +249,12 @@ const UploadScan = () => {
           </select>
         </div>
 
-        <button className="start-btn" onClick={handleStartAnalysis}>
-          Start Automated Analysis →
+        <button
+          className="start-btn"
+          onClick={handleStartAnalysis}
+          disabled={loading}
+        >
+          {loading ? "Uploading..." : "Start Automated Analysis →"}
         </button>
       </div>
 
@@ -188,6 +266,3 @@ const UploadScan = () => {
 };
 
 export default UploadScan;
-
-
-

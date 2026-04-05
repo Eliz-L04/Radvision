@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Reports.css";
 
 /* MUI ICONS */
@@ -9,26 +10,41 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SearchIcon from "@mui/icons-material/Search";
 
+const API_BASE = "http://127.0.0.1:5000";
+
 const Reports = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("recent");
   const [search, setSearch] = useState("");
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const data = {
-    recent: [
-      { id: "RAD-2041", name: "John Doe", age: 45, gender: "Male", scan: "Knee MRI (Left)", date: "2026-01-08", status: "Awaiting Review" },
-      { id: "RAD-2042", name: "Sarah Lee", age: 38, gender: "Female", scan: "Knee MRI (Right)", date: "2026-01-07", status: "Reported" },
-      { id: "RAD-2043", name: "Michael Thompson", age: 52, gender: "Male", scan: "Knee MRI (ACL Protocol)", date: "2026-01-07", status: "In Progress" },
-      { id: "RAD-2044", name: "Elena Rodriguez", age: 41, gender: "Female", scan: "Knee MRI (Meniscus Study)", date: "2026-01-06", status: "Reported" },
-      { id: "RAD-2045", name: "David Kim", age: 60, gender: "Male", scan: "Knee MRI (Post-Op)", date: "2026-01-06", status: "Urgent" }
-    ],
-    pending: [],
-    completed: []
+  // Fetch saved reports from backend
+  useEffect(() => {
+    setLoading(true);
+    fetch(`${API_BASE}/saved-reports`)
+      .then((res) => res.json())
+      .then((data) => {
+        setReports(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch reports:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  // Categorize reports by status
+  const categorized = {
+    recent: reports,
+    pending: reports.filter((r) => r.status === "In Progress" || r.status === "Awaiting Review"),
+    completed: reports.filter((r) => r.status === "Reported" || r.status === "Completed"),
   };
 
-  const filteredData = data[activeTab].filter(
+  const filteredData = categorized[activeTab].filter(
     (item) =>
-      item.name.toLowerCase().includes(search.toLowerCase()) ||
-      item.id.toLowerCase().includes(search.toLowerCase())
+      (item.name || "").toLowerCase().includes(search.toLowerCase()) ||
+      (item.patient_id || "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -52,7 +68,7 @@ const Reports = () => {
             onClick={() => setActiveTab("recent")}
           >
             <HistoryIcon style={{ fontSize: 16, marginRight: 6 }} />
-            Recent Uploads
+            All Reports ({categorized.recent.length})
           </button>
 
           <button
@@ -60,7 +76,7 @@ const Reports = () => {
             onClick={() => setActiveTab("pending")}
           >
             <PendingActionsIcon style={{ fontSize: 16, marginRight: 6 }} />
-            Pending Reports
+            In Progress ({categorized.pending.length})
           </button>
 
           <button
@@ -68,7 +84,7 @@ const Reports = () => {
             onClick={() => setActiveTab("completed")}
           >
             <CheckCircleIcon style={{ fontSize: 16, marginRight: 6 }} />
-            Completed Reports
+            Completed ({categorized.completed.length})
           </button>
         </div>
 
@@ -114,40 +130,64 @@ const Reports = () => {
           </thead>
 
           <tbody>
-            {filteredData.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.name}</td>
-                <td>{item.age}</td>
-                <td>{item.gender}</td>
-                <td>{item.scan}</td>
-                <td>{item.date}</td>
-
-                <td>
-                  <span className={`status ${item.status.replace(" ", "-").toLowerCase()}`}>
-                    {item.status}
-                  </span>
-                </td>
-
-                <td>
-                  <button className="view-btn">View</button>
+            {loading ? (
+              <tr>
+                <td colSpan="8" style={{ textAlign: "center", padding: "40px", color: "#7dd3c0" }}>
+                  Loading reports...
                 </td>
               </tr>
-            ))}
+            ) : filteredData.length === 0 ? (
+              <tr>
+                <td colSpan="8" style={{ textAlign: "center", padding: "40px", color: "#7dd3c0" }}>
+                  {search ? "No matching reports found" : "No reports yet. Save progress from Patient Details to see reports here."}
+                </td>
+              </tr>
+            ) : (
+              filteredData.map((item) => (
+                <tr key={item.patient_id}>
+                  <td>{item.patient_id}</td>
+                  <td>{item.name}</td>
+                  <td>{item.age}</td>
+                  <td>{item.gender}</td>
+                  <td>{item.scan_type || "Knee MRI"}</td>
+                  <td>{item.updated_at || item.created_at || "—"}</td>
+
+                  <td>
+                    <span className={`status ${(item.status || "").replace(/ /g, "-").toLowerCase()}`}>
+                      {item.status}
+                    </span>
+                  </td>
+
+                  <td>
+                    <button
+                      className="view-btn"
+                      onClick={() =>
+                        navigate(`/patient/${item.patient_id}`, {
+                          state: {
+                            patient: {
+                              patientId: item.patient_id,
+                              name: item.name,
+                              age: item.age,
+                              gender: item.gender,
+                            },
+                          },
+                        })
+                      }
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
 
-        {/* FOOTER + PAGINATION */}
+        {/* FOOTER */}
         <div className="reports-footer">
-          <span>Showing 1–5 of 42 orthopedic cases</span>
-
-          <div className="reports-pagination">
-            <button className="page-btn">‹</button>
-            <button className="page-btn active">1</button>
-            <button className="page-btn">2</button>
-            <button className="page-btn">3</button>
-            <button className="page-btn">›</button>
-          </div>
+          <span>
+            {filteredData.length} report{filteredData.length !== 1 ? "s" : ""}
+          </span>
         </div>
       </div>
 
