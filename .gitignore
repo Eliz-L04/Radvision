@@ -18,7 +18,7 @@ package-lock.json
 
 # Virtual environments
 Ai_module/.venv/
-BACKEND/rad-env/.env/
+BACKEND/rad-env/
 
 # Python bytecode
 __pycache__/
