@@ -537,7 +537,7 @@ const RadiologyReport = () => {
           <div className="side-card disclaimer-card">
             <h3>⚠ Disclaimer</h3>
             <p>
-              AI-generated report (ViT + TDA + RF + Claude).
+              AI-generated report (ViT + TDA + RF ).
               Must be reviewed and confirmed by a qualified radiologist
               before clinical use.
             </p>

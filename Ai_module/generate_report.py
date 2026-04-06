@@ -1,18 +1,17 @@
-# generate_report.py
 """
 Clinical MRI Report Generation for Knee Analysis
 =================================================
 HOW IT WORKS:
   1. Receives predictions from your ML pipeline (ViT + TDA + Random Forest)
-  2. Sends those predictions to Claude API
-  3. Claude writes professional clinical radiology report text
+  2. Sends those predictions to a local LLM via Ollama
+  3. The local LLM writes professional clinical radiology report text
   4. Builds a 2-page PDF:
-       Page 1 — Clinical report (AI-written by Claude)
+       Page 1 — Clinical report (AI-written)
        Page 2 — Visualization appendix (MRI slices + Grad-CAM + TDA diagrams)
 
 SETUP (one time only):
-  pip install anthropic
-  export ANTHROPIC_API_KEY="your-api-key-here"
+  1. Install Ollama (https://ollama.com)
+  2. Run: ollama run llama3
 
 Called by predict.py as:
     generate_pdf_report(
@@ -52,16 +51,13 @@ from PIL import Image
 from scipy.ndimage import zoom
 import joblib
 
-# ── OpenRouter API (Claude via OpenRouter) ────────────────────────────────────
+# ── LLM Configuration (Local Ollama) ──────────────────────────────────────────
 import httpx
-CLAUDE_AVAILABLE = True   # Always available via httpx
 
-OPENROUTER_API_KEY = os.environ.get(
-    "OPENROUTER_API_KEY",
-    "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"
-)
-OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
-
+# Local Ollama config
+USE_OLLAMA = os.environ.get("USE_OLLAMA", "true").lower() == "true"
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/api/chat")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3")
 # ── Local imports ─────────────────────────────────────────────────────────────
 try:
     from grad_cam import ViTGradCAM, overlay_heatmap
@@ -224,30 +220,28 @@ def generate_ai_report_text(predictions: Dict,
                              tda_features: Dict,
                              patient_info: Dict) -> Dict:
     """
-    Sends ML predictions to Claude API.
-    Claude writes professional clinical radiology report text.
+    Sends ML predictions to a Local LLM (Ollama).
+    The AI writes professional clinical radiology report text.
 
-    What Claude receives:
+    What the AI receives:
         - Abnormality prediction + confidence %
         - ACL tear prediction + confidence %
         - Meniscus tear prediction + confidence %
         - TDA structural complexity metrics
         - Patient age and gender
 
-    What Claude returns (as JSON):
+    What the AI returns (as JSON):
         {
           'technique':  'MRI technique sentence.',
           'findings':   ['Finding 1...', 'Finding 2...', ...],
           'impression': ['Impression 1...', 'Impression 2...']
         }
 
-    Falls back to template text if API unavailable.
+    Falls back to template text if API or local AI is unavailable.
     """
-    api_key = OPENROUTER_API_KEY
-
-    if not api_key:
-        print("  [OpenRouter] No API key — using template text.")
-        print("               Set OPENROUTER_API_KEY environment variable.")
+    if not USE_OLLAMA:
+        print("  [Report Gen] Ollama is disabled (USE_OLLAMA=false).")
+        print("               Falling back to hardcoded template text.")
         return _template_report_text(predictions, tda_features, patient_info)
 
     # ── Extract values ─────────────────────────────────────────────────────
@@ -311,53 +305,43 @@ RESPOND WITH ONLY THIS JSON — no markdown, no extra text:
   ]
 }}"""
 
-    # ── Call Claude via OpenRouter ──────────────────────────────────────────
-    try:
-        print("  [OpenRouter] Generating clinical report text via Claude...")
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-            "HTTP-Referer": "https://radvision-ai.local",
-            "X-Title": "RadVision AI Report Generator"
-        }
-        payload = {
-            "model": "anthropic/claude-sonnet-4",
-            "max_tokens": 1200,
-            "messages": [{"role": "user", "content": prompt}]
-        }
+    # ── Call Local Ollama ───────────────────────────────────────────────────
+    if USE_OLLAMA:
+        try:
+            print(f"  [Ollama] Generating clinical report text using local model '{OLLAMA_MODEL}'...")
+            payload = {
+                "model": OLLAMA_MODEL,
+                "messages": [{"role": "user", "content": prompt}],
+                "stream": False,
+                "format": "json"  # Forces JSON output if supported by model
+            }
 
-        resp = httpx.post(
-            OPENROUTER_BASE_URL,
-            headers=headers,
-            json=payload,
-            timeout=60.0
-        )
+            resp = httpx.post(OLLAMA_BASE_URL, json=payload, timeout=120.0)
+            
+            if resp.status_code != 200:
+                raise RuntimeError(f"HTTP {resp.status_code}: {resp.text}")
 
-        if resp.status_code != 200:
-            err_body = resp.text[:500] if resp.text else "No response body"
-            raise RuntimeError(f"HTTP {resp.status_code}: {err_body}")
+            data = resp.json()
+            raw = data["message"]["content"].strip()
+            
+            # Clean up markdown
+            raw = raw.replace("```json", "").replace("```", "").strip()
 
-        data = resp.json()
+            result = json.loads(raw)
 
-        raw = data["choices"][0]["message"]["content"].strip()
-        # Strip markdown code fences if Claude added them
-        raw = raw.replace("```json", "").replace("```", "").strip()
+            # Validate keys
+            if not all(k in result for k in ('findings', 'impression', 'technique')):
+                raise ValueError("Ollama response missing required keys")
 
-        result = json.loads(raw)
+            print("  [Ollama] ✅ Local AI report generated successfully")
+            return result
 
-        # Validate keys
-        if not all(k in result for k in ('findings', 'impression', 'technique')):
-            raise ValueError("Claude response missing required keys")
+        except Exception as e:
+            print(f"  [Ollama] Failed to generate with local Ollama: {e}")
+            print("  [Ollama] Falling back to template text.")
+            return _template_report_text(predictions, tda_features, patient_info)
 
-        print("  [OpenRouter] ✅ Report text generated successfully")
-        return result
-
-    except json.JSONDecodeError as e:
-        print(f"  [OpenRouter] JSON parse error: {e} — using template")
-        return _template_report_text(predictions, tda_features, patient_info)
-    except Exception as e:
-        print(f"  [OpenRouter] Error: {e} — using template")
-        return _template_report_text(predictions, tda_features, patient_info)
+    return _template_report_text(predictions, tda_features, patient_info)
 
 
 # =============================================================================
@@ -369,8 +353,8 @@ def _template_report_text(predictions: Dict,
                            patient_info: Dict) -> Dict:
     """
     Hardcoded template report text.
-    Used when ANTHROPIC_API_KEY is not set or the API call fails.
-    Quality is decent but not as natural as Claude-written text.
+    Used when local AI generation fails or is disabled.
+    Quality is decent but not as natural as AI-written text.
     """
     abn     = predictions.get('abnormal', {})
     acl     = predictions.get('acl', {})
@@ -667,12 +651,10 @@ def _page1_report(pdf: PdfPages,
         y -= LH * 1.7
 
     # ── AI source note ────────────────────────────────────────────────────────
-    has_api = bool(OPENROUTER_API_KEY)
-    note = (
-        "★ Report text written by Claude AI (via OpenRouter) from ViT + TDA + Random Forest predictions."
-        if has_api else
-        "★ Report text generated from template. Set OPENROUTER_API_KEY to enable AI-written reports."
-    )
+    if USE_OLLAMA:
+        note = f"★ Report text generated locally by {OLLAMA_MODEL} AI from ViT + TDA + Random Forest predictions."
+    else:
+        note = "★ Report text generated from template. Enable Ollama for dynamic AI reports."
     ax.text(0.5, 0.095, note, fontsize=5.5, ha='center', va='top',
             color='#777777', style='italic')
 
