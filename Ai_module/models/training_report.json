@@ -1,0 +1,44 @@
+{
+  "abnormal": {
+    "task": "abnormal",
+    "model": "rf",
+    "cv_auc": 0.8716,
+    "best_threshold": 0.6115,
+    "val_accuracy": 0.8407,
+    "val_precision": 0.8731,
+    "val_recall": 0.9399,
+    "val_f1": 0.9053,
+    "val_auc": 0.8582,
+    "n_train": 904,
+    "n_val": 226,
+    "positive_rate_train": 0.8075
+  },
+  "acl": {
+    "task": "acl",
+    "model": "rf",
+    "cv_auc": 0.7423,
+    "best_threshold": 0.2522,
+    "val_accuracy": 0.8319,
+    "val_precision": 0.537,
+    "val_recall": 0.6905,
+    "val_f1": 0.6042,
+    "val_auc": 0.8139,
+    "n_train": 904,
+    "n_val": 226,
+    "positive_rate_train": 0.1836
+  },
+  "meniscus": {
+    "task": "meniscus",
+    "model": "rf",
+    "cv_auc": 0.7563,
+    "best_threshold": 0.3838,
+    "val_accuracy": 0.7566,
+    "val_precision": 0.625,
+    "val_recall": 0.7595,
+    "val_f1": 0.6857,
+    "val_auc": 0.779,
+    "n_train": 904,
+    "n_val": 226,
+    "positive_rate_train": 0.3518
+  }
+}
