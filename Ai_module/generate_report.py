@@ -56,10 +56,7 @@ import joblib
 import httpx
 CLAUDE_AVAILABLE = True   # Always available via httpx
 
-OPENROUTER_API_KEY = os.environ.get(
-    "OPENROUTER_API_KEY",
-    "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"
-)
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", None)
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 # ── Local imports ─────────────────────────────────────────────────────────────
