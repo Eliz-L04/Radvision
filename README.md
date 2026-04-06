@@ -4,7 +4,7 @@
 
 ---
 
-##Key Features
+## Key Features
 
 - **AI-Powered Pathology Detection:** Predicts overall knee abnormality, ACL tears, and Meniscal tears using a Random Forest classifier.
 - **Deep Visual Architecture:** Utilizes *Vision Transformers (ViT)* to extract high-level semantic embeddings from multiparametric MRI slices.
