@@ -1,10 +1,10 @@
-# 🩻 RadVision AI 
+# RadVision AI 
 
 **RadVision AI** is an advanced full-stack medical application designed to automate and enhance clinical MRI knee analysis. Using a state-of-the-art ensemble of Vision Transformers (ViT), Topological Data Analysis (TDA), and Natural Language Generation via local LLMs, RadVision generates professional-grade, privacy-first radiology reports.
 
 ---
 
-## ✨ Key Features
+##Key Features
 
 - **AI-Powered Pathology Detection:** Predicts overall knee abnormality, ACL tears, and Meniscal tears using a Random Forest classifier.
 - **Deep Visual Architecture:** Utilizes *Vision Transformers (ViT)* to extract high-level semantic embeddings from multiparametric MRI slices.
@@ -13,7 +13,7 @@
 - **Generative AI Reporting:** Translates ML predictions and TDA matrices into fluid, expert-level clinical findings utilizing local LLMs (via Ollama).
 - **100% Data Privacy:** Generates all clinical texts and PDF reports entirely on offline, local hardware to strictly maintain patient data privacy constraints.
 
-## 🏗️ Tech Stack
+## Tech Stack
 
 - **Frontend:** React + Vite
 - **Backend Core:** Python, Flask, Werkzeug
@@ -24,7 +24,7 @@
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Prerequisites
 Ensure you have the following installed to run the application locally:
@@ -67,7 +67,7 @@ npm run dev
 
 ---
 
-## 🩺 System Workflow
+## System Workflow
 
 1. **Upload:** A clinician uploads knee MRI `.npy` volume files (Axial, Coronal, Sagittal) to the interface.
 2. **Preprocessing:** The backend normalizes the volumes and aligns geometric slices.
