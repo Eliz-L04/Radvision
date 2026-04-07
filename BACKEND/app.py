@@ -399,55 +399,47 @@ def grad_cam_image(patient_id):
         file_data = fs.get(mri[use_plane]).read()
         volume = np.load(io.BytesIO(file_data), allow_pickle=True)
 
-        # Normalize volume to uint8 for PIL
-        slice_idx = volume.shape[0] // 2
-        sd = volume[slice_idx].copy().astype(np.float32)
-        sd -= sd.min()
-        if sd.max() > 0:
-            sd /= sd.max()
-        sd = (sd * 255).astype(np.uint8)
-
         from PIL import Image as PILImage
-        img = PILImage.fromarray(sd)
 
-        # Run Grad-CAM (uses cached singleton — no model reload)
+        # Select 2 representative slices (33 % and 66 % through volume)
+        n_vol = volume.shape[0]
+        slice_indices = [max(0, n_vol // 3), min(n_vol - 1, 2 * n_vol // 3)]
+
+        # Get Grad-CAM singleton (ViT loaded once)
         gc = _get_gradcam_instance()
         if gc is None:
             return jsonify({"error": "Grad-CAM model failed to load"}), 500
-        cam = gc.generate_cam(img)
 
-        # Build 3-panel figure
-        # Panel 2: PURE jet colormap (just attention values, no original underneath)
-        import cv2 as _cv2
-        cam_up = _cv2.resize(cam, (224, 224), interpolation=_cv2.INTER_CUBIC)
-        cam_up = np.clip(cam_up, 0, 1)
-
-        # Panel 3: Jet overlay blended ON TOP of original MRI
-        jet_overlay = overlay_heatmap(img, cam, alpha=0.5)
-
-        img_rgb = np.array(img.convert("RGB").resize((224, 224)))
-
-        fig, axes = plt.subplots(1, 3, figsize=(15, 5), facecolor="black")
+        # Build 2×2 figure: rows = slices, cols = [Original Image Slice | Heatmap Overlay Slice]
+        fig, axes = plt.subplots(2, 2, figsize=(10, 10), facecolor="black")
         fig.suptitle(
-            f"Grad-CAM  |  {use_plane.capitalize()} Plane  (slice {slice_idx})",
+            f"Grad-CAM  |  {use_plane.capitalize()} Plane",
             color="white", fontsize=13, fontweight="bold"
         )
 
-        for ax in axes:
-            ax.set_facecolor("black")
-            ax.axis("off")
+        axes[0, 0].set_title("Original Image Slice",  color="white", fontsize=11)
+        axes[0, 1].set_title("Heatmap Overlay Slice", color="white", fontsize=11)
 
-        # Panel 1: Original MRI
-        axes[0].imshow(img_rgb)
-        axes[0].set_title("Original", color="white", fontsize=11)
+        for row_i, sl_idx in enumerate(slice_indices):
+            sd = volume[sl_idx].copy().astype(np.float32)
+            sd -= sd.min()
+            if sd.max() > 0:
+                sd /= sd.max()
+            sd = (sd * 255).astype(np.uint8)
 
-        # Panel 2: Pure jet heatmap (cam values only, like the reference)
-        axes[1].imshow(cam_up, cmap="jet", vmin=0, vmax=1)
-        axes[1].set_title("Grad-CAM Heatmap", color="white", fontsize=11)
+            img_slice = PILImage.fromarray(sd)
+            cam_slice = gc.generate_cam(img_slice)
+            jet_ov    = overlay_heatmap(img_slice, cam_slice, alpha=0.5)
 
-        # Panel 3: Jet overlay blended on original MRI
-        axes[2].imshow(jet_overlay)
-        axes[2].set_title("Overlay", color="white", fontsize=11)
+            img_gray = np.array(img_slice.convert("L").resize((224, 224)))
+
+            axes[row_i, 0].imshow(img_gray, cmap="gray")
+            axes[row_i, 0].axis("off")
+            axes[row_i, 0].set_facecolor("black")
+
+            axes[row_i, 1].imshow(jet_ov)
+            axes[row_i, 1].axis("off")
+            axes[row_i, 1].set_facecolor("black")
 
         plt.tight_layout()
 
